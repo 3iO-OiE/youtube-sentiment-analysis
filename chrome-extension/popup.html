@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>YouTube Sentiment Analyzer</title>
+    <link rel="stylesheet" href="css/popup.css">
+</head>
+<body>
+    <div class="container">
+        <!-- Header -->
+        <header>
+            <h1> Sentiment Analyzer</h1>
+            <div class="settings">
+                <button id="toggleTheme" class="icon-btn" title="Mode sombre/clair">
+                    🌙
+                </button>
+                <button id="refreshBtn" class="icon-btn" title="Actualiser">
+                    🔄
+                </button>
+            </div>
+        </header>
+
+        <!-- Configuration API -->
+        <div class="api-config">
+            <label for="apiUrl">URL de l'API:</label>
+            <input type="text" id="apiUrl" placeholder="https://your-space.hf.space" />
+            <button id="saveApiUrl" class="btn-primary">Sauvegarder</button>
+        </div>
+
+        <!-- Bouton d'analyse -->
+        <div class="actions">
+            <button id="analyzeBtn" class="btn-analyze">
+                Analyser les Commentaires
+            </button>
+        </div>
+
+        <!-- Zone de chargement -->
+        <div id="loading" class="loading hidden">
+            <div class="spinner"></div>
+            <p>Analyse en cours...</p>
+        </div>
+
+        <!-- Statistiques globales -->
+        <div id="statistics" class="statistics hidden">
+            <h2> Statistiques Globales</h2>
+            <div class="stats-grid">
+                <div class="stat-card positive">
+                    <span class="stat-label">Positifs</span>
+                    <span class="stat-value" id="positivePercent">0%</span>
+                    <span class="stat-count" id="positiveCount">0</span>
+                </div>
+                <div class="stat-card neutral">
+                    <span class="stat-label">Neutres</span>
+                    <span class="stat-value" id="neutralPercent">0%</span>
+                    <span class="stat-count" id="neutralCount">0</span>
+                </div>
+                <div class="stat-card negative">
+                    <span class="stat-label">Négatifs</span>
+                    <span class="stat-value" id="negativePercent">0%</span>
+                    <span class="stat-count" id="negativeCount">0</span>
+                </div>
+            </div>
+            
+            <div class="chart-container">
+                <canvas id="sentimentChart"></canvas>
+            </div>
+        </div>
+
+        <!-- Filtres -->
+        <div id="filters" class="filters hidden">
+            <h3>Filtrer par sentiment:</h3>
+            <div class="filter-buttons">
+                <button class="filter-btn active" data-filter="all">Tous</button>
+                <button class="filter-btn" data-filter="positive">Positifs</button>
+                <button class="filter-btn" data-filter="neutral">Neutres</button>
+                <button class="filter-btn" data-filter="negative">Négatifs</button>
+            </div>
+        </div>
+
+        <!-- Liste des commentaires -->
+        <div id="commentsList" class="comments-list hidden"></div>
+
+        <!-- Actions supplémentaires -->
+        <div id="extraActions" class="extra-actions hidden">
+            <button id="copyResults" class="btn-secondary">
+                📋 Copier les résultats
+            </button>
+            <button id="exportCSV" class="btn-secondary">
+                📥 Exporter CSV
+            </button>
+        </div>
+
+        <!-- Messages d'erreur -->
+        <div id="errorMessage" class="error-message hidden"></div>
+    </div>
+
+    <script src="js/chart.min.js"></script>
+    <script src="js/popup.js"></script>
+</body>
+</html>
