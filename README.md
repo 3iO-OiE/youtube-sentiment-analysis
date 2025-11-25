@@ -7,16 +7,12 @@ sdk: docker
 app_port: 7860
 ---
 
-# 🎬 YouTube Sentiment Analysis - Analyse de Sentiment des Commentaires YouTube
+#  YouTube Sentiment Analysis - Analyse de Sentiment des Commentaires YouTube
 
 Système MLOps complet permettant l'analyse automatique du sentiment des commentaires YouTube en temps réel via une extension Chrome connectée à une API cloud.
 
-![Python](https://img.shields.io/badge/Python-3.10+-blue)
-![FastAPI](https://img.shields.io/badge/FastAPI-0.104+-green)
-![Docker](https://img.shields.io/badge/Docker-Ready-blue)
-![License](https://img.shields.io/badge/License-MIT-yellow)
 
-## 📋 Table des Matières
+## Table des Matières
 
 - [Description du Projet](#description-du-projet)
 - [Architecture Technique](#architecture-technique)
@@ -27,24 +23,24 @@ Système MLOps complet permettant l'analyse automatique du sentiment des comment
 - [Performance du Modèle](#performance-du-modèle)
 - [Démonstration](#démonstration)
 
-## 🎯 Description du Projet
+##  Description du Projet
 
 ### Problématique
 
 Les créateurs de contenu YouTube reçoivent des centaines, voire des milliers de commentaires sur leurs vidéos. L'analyse manuelle de ces commentaires est :
-- ⏰ Chronophage et peu scalable
-- 🤔 Subjective et biaisée
-- 📊 Difficile à quantifier pour des décisions stratégiques
+-  Chronophage et peu scalable
+-  Subjective et biaisée
+-  Difficile à quantifier pour des décisions stratégiques
 
 ### Solution
 
 Notre système offre une solution complète comprenant :
-- 🤖 **Modèle ML** entraîné sur 36K+ commentaires avec 87.9% d'accuracy
-- 🚀 **API REST FastAPI** déployée sur Hugging Face Spaces
-- 🌐 **Extension Chrome** pour analyse en temps réel
-- 📈 **Visualisations** interactives et statistiques détaillées
+-  **Modèle ML** entraîné sur 36K+ commentaires avec 87.9% d'accuracy
+-  **API REST FastAPI** déployée sur Hugging Face Spaces
+-  **Extension Chrome** pour analyse en temps réel
+-  **Visualisations** interactives et statistiques détaillées
 
-## 🏗️ Architecture Technique
+##  Architecture Technique
 
 ```
 ┌─────────────────┐
@@ -81,24 +77,24 @@ Notre système offre une solution complète comprenant :
 | **Déploiement** | Docker, Hugging Face Spaces |
 | **Version Control** | Git, GitHub |
 
-## ✨ Fonctionnalités
+##  Fonctionnalités
 
 ### Extension Chrome
-- ✅ Extraction automatique des commentaires YouTube
-- 📊 Statistiques globales en temps réel
-- 🎨 Mode sombre/clair
-- 🔍 Filtres par sentiment (Positif/Neutre/Négatif)
-- 📋 Export des résultats
-- ⚡ Performance : analyse de 50 commentaires en <2s
+-  Extraction automatique des commentaires YouTube
+-  Statistiques globales en temps réel
+-  Mode sombre/clair
+-  Filtres par sentiment (Positif/Neutre/Négatif)
+-  Export des résultats
+-  Performance : analyse de 50 commentaires en <2s
 
 ### API
-- 🏥 Health check endpoint
-- 🔄 Traitement par batch
-- 📊 Statistiques détaillées
-- 🛡️ Validation automatique des données
-- 📝 Documentation interactive Swagger
+-  Health check endpoint
+-  Traitement par batch
+-  Statistiques détaillées
+-  Validation automatique des données
+-  Documentation interactive Swagger
 
-## 🚀 Installation et Utilisation
+##  Installation et Utilisation
 
 ### Prérequis
 
@@ -107,7 +103,7 @@ Notre système offre une solution complète comprenant :
 - Google Chrome
 - Compte Hugging Face (pour déploiement)
 
-### 1️⃣ Installation Locale de l'API
+###  Installation Locale de l'API
 
 ```bash
 # Cloner le repository
@@ -129,7 +125,7 @@ uvicorn app_api:app --reload --host 0.0.0.0 --port 8000
 
 L'API sera accessible sur `http://localhost:8000`
 
-### 2️⃣ Installation de l'Extension Chrome
+###  Installation de l'Extension Chrome
 
 1. Ouvrir Chrome et aller dans `chrome://extensions/`
 2. Activer le **Mode développeur** (coin supérieur droit)
@@ -137,7 +133,7 @@ L'API sera accessible sur `http://localhost:8000`
 4. Sélectionner le dossier `chrome-extension/`
 5. L'extension apparaît dans la barre d'outils
 
-### 3️⃣ Configuration de l'Extension
+###  Configuration de l'Extension
 
 1. Ouvrir l'extension
 2. Dans le champ "URL de l'API", entrer :
@@ -145,14 +141,14 @@ L'API sera accessible sur `http://localhost:8000`
    - Production : `https://votre-space.hf.space`
 3. Cliquer sur **Sauvegarder**
 
-### 4️⃣ Utilisation
+###  Utilisation
 
 1. Visiter n'importe quelle vidéo YouTube
 2. Cliquer sur l'icône de l'extension
 3. Cliquer sur **Analyser les Commentaires**
 4. Consulter les résultats et statistiques
 
-## 📡 API Endpoints
+##  API Endpoints
 
 ### GET `/`
 Informations générales sur l'API
@@ -265,7 +261,7 @@ curl -X POST "https://votre-space.hf.space/predict_batch" \
   }'
 ```
 
-## 🌐 Extension Chrome
+##  Extension Chrome
 
 ### Fonctionnalités Détaillées
 
@@ -295,7 +291,7 @@ curl -X POST "https://votre-space.hf.space/predict_batch" \
 - Copie des résultats en format texte structuré
 - Inclut les statistiques et la liste complète
 
-## 🎯 Performance du Modèle
+##  Performance du Modèle
 
 ### Métriques
 
@@ -325,45 +321,23 @@ curl -X POST "https://votre-space.hf.space/predict_batch" \
   - 1 : Neutre
   - 2 : Positif
 
-## 📸 Démonstration
+##  Démonstration
 
-### 1. Interface de l'Extension
+###  Interface de l'Extension
 
-![Extension Chrome](screenshots/extension_interface.png)
+![Extension Chrome](screenshots/14.png)
 
 L'interface affiche les statistiques globales avec un graphique circulaire et la liste des commentaires filtrables.
 
-### 2. Statistiques Détaillées
+###  Statistiques Détaillées et Liste des Commentaires
 
-![Statistiques](screenshots/statistics.png)
+![Statistiques](screenshots/15.png)
 
 Visualisation des pourcentages de chaque sentiment avec nombres absolus.
-
-### 3. Liste des Commentaires
-
-![Liste Commentaires](screenshots/comments_list.png)
-
 Chaque commentaire est affiché avec son sentiment, sa confiance et une icône colorée.
 
-### 4. Mode Sombre
 
-![Mode Sombre](screenshots/dark_mode.png)
-
-Interface adaptée pour une utilisation confortable la nuit.
-
-### 5. Résultats API
-
-![API Response](screenshots/api_response.png)
-
-Exemple de réponse JSON structurée de l'API.
-
-### 6. Tests Réussis
-
-![Tests](screenshots/tests_passed.png)
-
-Tous les tests unitaires et d'intégration passent avec succès.
-
-## 🐳 Déploiement Docker
+##  Déploiement Docker
 
 ### Dockerfile
 
@@ -393,7 +367,7 @@ docker build -t youtube-sentiment-api .
 docker run -p 7860:7860 youtube-sentiment-api
 ```
 
-## 📊 Structure du Projet
+##  Structure du Projet
 
 ```
 youtube-sentiment-analysis/
@@ -452,5 +426,3 @@ train_sentiment_model(
 ```
 
 
-
-⭐ Si ce projet vous a été utile, n'hésitez pas à lui donner une étoile !
