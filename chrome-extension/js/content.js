@@ -32,6 +32,11 @@ function extractComments() {
 
 // Écouter les messages du popup
 chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
+    if (request.action === 'ping') {
+        sendResponse({ success: true });
+        return true;
+    }
+    
     if (request.action === 'extractComments') {
         const comments = extractComments();
         sendResponse({

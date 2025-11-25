@@ -5,7 +5,8 @@
   "description": "Analyse automatique du sentiment des commentaires YouTube",
   "permissions": [
     "activeTab",
-    "storage"
+    "storage",
+    "scripting"
   ],
   "host_permissions": [
     "https://www.youtube.com/*"

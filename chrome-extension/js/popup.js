@@ -80,6 +80,20 @@ async function analyzeComments() {
             throw new Error('Veuillez ouvrir une vidéo YouTube');
         }
         
+        // Vérifier si le content script est déjà injecté
+        try {
+            await chrome.tabs.sendMessage(tab.id, { action: 'ping' });
+        } catch (error) {
+            // Injecter le content script si nécessaire
+            console.log('Injection du content script...');
+            await chrome.scripting.executeScript({
+                target: { tabId: tab.id },
+                files: ['js/content.js']
+            });
+            // Attendre un peu pour que le script s'initialise
+            await new Promise(resolve => setTimeout(resolve, 500));
+        }
+        
         const response = await chrome.tabs.sendMessage(tab.id, { action: 'extractComments' });
         
         if (!response.success || response.comments.length === 0) {
@@ -157,38 +171,66 @@ function displayStatistics(stats, total) {
 // Créer le graphique
 function createChart(stats) {
     const canvas = document.getElementById('sentimentChart');
-    const ctx = canvas.getContext('2d');
     
-    if (window.sentimentChart) {
-        window.sentimentChart.destroy();
+    if (!canvas) {
+        console.error('Canvas element not found');
+        return;
     }
     
-    window.sentimentChart = new Chart(ctx, {
-        type: 'doughnut',
-        data: {
-            labels: ['Positifs', 'Neutres', 'Négatifs'],
-            datasets: [{
-                data: [
-                    stats.positive_percentage,
-                    stats.neutral_percentage,
-                    stats.negative_percentage
-                ],
-                backgroundColor: ['#2ecc71', '#95a5a6', '#e74c3c'],
-                borderWidth: 0
-            }]
-        },
-        options: {
-            responsive: true,
-            maintainAspectRatio: false,
-            plugins: {
-                legend: {
-                    display: false
+    const ctx = canvas.getContext('2d');
+    
+    // Détruire l'ancien graphique s'il existe (avec vérification)
+    if (window.sentimentChart) {
+        try {
+            if (typeof window.sentimentChart.destroy === 'function') {
+                window.sentimentChart.destroy();
+            }
+        } catch (e) {
+            console.warn('Could not destroy previous chart:', e);
+        }
+        window.sentimentChart = null;
+    }
+    
+    // Vérifier que Chart.js est chargé
+    if (typeof Chart === 'undefined') {
+        console.error('Chart.js not loaded!');
+        alert('Erreur: Chart.js non chargé. Veuillez recharger l\'extension.');
+        return;
+    }
+    
+    // Créer le nouveau graphique
+    try {
+        window.sentimentChart = new Chart(ctx, {
+            type: 'doughnut',
+            data: {
+                labels: ['Positifs', 'Neutres', 'Négatifs'],
+                datasets: [{
+                    data: [
+                        stats.positive_percentage,
+                        stats.neutral_percentage,
+                        stats.negative_percentage
+                    ],
+                    backgroundColor: ['#2ecc71', '#95a5a6', '#e74c3c'],
+                    borderWidth: 0
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    legend: {
+                        display: false
+                    }
                 }
             }
-        }
-    });
+        });
+        
+        console.log('✅ Chart created successfully');
+        
+    } catch (error) {
+        console.error('Error creating chart:', error);
+    }
 }
-
 // Afficher les commentaires
 function displayComments(predictions) {
     const container = document.getElementById('commentsList');
@@ -196,7 +238,15 @@ function displayComments(predictions) {
     
     const filtered = predictions.filter(p => {
         if (currentFilter === 'all') return true;
-        return p.sentiment.toLowerCase() === currentFilter;
+        
+        // Mapper les filtres anglais aux sentiments français
+        const sentimentMap = {
+            'positive': 'positif',
+            'neutral': 'neutre',
+            'negative': 'négatif'
+        };
+        
+        return p.sentiment.toLowerCase() === sentimentMap[currentFilter];
     });
     
     if (filtered.length === 0) {
@@ -273,33 +323,49 @@ function exportCSV() {
     const url = URL.createObjectURL(blob);
     const a = document.createElement('a');
     a.href = url;
-    a.download = `sentiment-analysis-${Date.now()}.csv`;
+    a.download = `youtube-sentiment-${Date.now()}.csv`;
     a.click();
+    URL.revokeObjectURL(url);
     showMessage('CSV exporté!');
-}// Afficher/masquer le chargement
-function showLoading(show) {
-document.getElementById('loading').classList.toggle('hidden', !show);
-document.getElementById('analyzeBtn').disabled = show;
-}// Afficher une erreur
-function showError(message) {
-const errorDiv = document.getElementById('errorMessage');
-errorDiv.textContent = `❌ ${message}`;
-errorDiv.classList.remove('hidden');
-}// Masquer l'erreur
-function hideError() {
-document.getElementById('errorMessage').classList.add('hidden');
-}// Afficher un message temporaire
-function showMessage(message) {
-const errorDiv = document.getElementById('errorMessage');
-errorDiv.style.background = '#d4edda';
-errorDiv.style.color = '#155724';
-errorDiv.style.borderColor = '#155724';
-errorDiv.textContent = `✅ ${message}`;
-errorDiv.classList.remove('hidden');setTimeout(() => {
-    errorDiv.classList.add('hidden');
-    errorDiv.style.background = '';
-    errorDiv.style.color = '';
-    errorDiv.style.borderColor = '';
-}, 3000);
 }
+
+// Afficher le chargement
+function showLoading(show) {
+    const analyzeBtn = document.getElementById('analyzeBtn');
+    if (show) {
+        analyzeBtn.disabled = true;
+        analyzeBtn.textContent = '⏳ Analyse en cours...';
+    } else {
+        analyzeBtn.disabled = false;
+        analyzeBtn.textContent = '🔍 Analyser les commentaires';
+    }
+}
+
+// Afficher une erreur
+function showError(message) {
+    const errorDiv = document.getElementById('errorMessage');
+    errorDiv.textContent = `❌ ${message}`;
+    errorDiv.classList.remove('hidden');
+}
+
+// Masquer l'erreur
+function hideError() {
+    document.getElementById('errorMessage').classList.add('hidden');
+}
+
+// Afficher un message temporaire
+function showMessage(message) {
+    const errorDiv = document.getElementById('errorMessage');
+    errorDiv.style.background = '#d4edda';
+    errorDiv.style.color = '#155724';
+    errorDiv.style.borderColor = '#155724';
+    errorDiv.textContent = `✅ ${message}`;
+    errorDiv.classList.remove('hidden');
     
+    setTimeout(() => {
+        errorDiv.classList.add('hidden');
+        errorDiv.style.background = '';
+        errorDiv.style.color = '';
+        errorDiv.style.borderColor = '';
+    }, 3000);
+}
