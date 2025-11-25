@@ -1,0 +1,11 @@
+{
+  "model_type": "SVM",
+  "accuracy": 0.8817720477300782,
+  "f1_score": 0.879066766578999,
+  "n_features": 5000,
+  "classes": {
+    "0": "N\u00e9gatif",
+    "1": "Neutre",
+    "2": "Positif"
+  }
+}

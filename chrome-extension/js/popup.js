@@ -1,6 +1,6 @@
 const API_URL_KEY = 'apiUrl';
 const THEME_KEY = 'theme';
-const DEFAULT_API_URL = 'http://localhost:8000';
+const DEFAULT_API_URL = 'https://3xpe-youtube-sentiment-api.hf.space';
 
 let currentFilter = 'all';
 let allPredictions = [];
